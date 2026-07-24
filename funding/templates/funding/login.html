@@ -1,0 +1,24 @@
+{% extends "funding/base.html" %}
+{% block title %}{{ text.login.heading }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-4">
+    <h1 class="h4 mb-3">{{ text.login.heading }}</h1>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <div class="mb-3">
+        <label class="form-label">{{ text.login.username_label }}</label>
+        {{ form.username.errors }}
+        <input type="text" name="username" class="form-control" autofocus required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">{{ text.login.password_label }}</label>
+        {{ form.password.errors }}
+        <input type="password" name="password" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-primary">{{ text.login.submit }}</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

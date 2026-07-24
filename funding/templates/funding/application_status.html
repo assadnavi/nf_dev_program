@@ -1,0 +1,49 @@
+{% extends "funding/base.html" %}
+{% load site_text_tags %}
+{% block title %}{{ text.application_status.page_title }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <h1 class="h3 mb-3">{% text "application_status.heading" %}</h1>
+
+    {% if application.status == 'refused' %}
+      <p>{{ text.application_status.refused }}</p>
+
+    {% elif application.status == 'upfront_invoice_pending' %}
+      <p>{{ text.application_status.upfront_pending_notice }}</p>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ upload_form.non_field_errors }}
+        <div class="mb-3">
+          <label class="form-label">{{ upload_form.invoice.label }}</label>
+          {{ upload_form.invoice.errors }}
+          {{ upload_form.invoice }}
+        </div>
+        <button type="submit" class="btn btn-primary">{{ text.application_status.upfront_submit }}</button>
+      </form>
+
+    {% elif application.status == 'awaiting_work_approval' %}
+      <p>{{ text.application_status.awaiting_approval_notice }}</p>
+
+    {% elif application.status == 'final_invoice_pending' %}
+      <p>{{ text.application_status.final_pending_notice }}</p>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ upload_form.non_field_errors }}
+        <div class="mb-3">
+          <label class="form-label">{{ upload_form.invoice.label }}</label>
+          {{ upload_form.invoice.errors }}
+          {{ upload_form.invoice }}
+        </div>
+        <button type="submit" class="btn btn-primary">{{ text.application_status.final_submit }}</button>
+      </form>
+
+    {% elif application.status == 'complete' %}
+      <p>{{ text.application_status.complete_notice }}</p>
+
+    {% else %}
+      <p>{{ text.application_status.fallback_notice }}</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "funding/base.html" %}
+{% block title %}{{ program.name }}{% endblock %}
+{% block content %}
+<h1 class="h3">{{ program.name }}</h1>
+<p class="text-muted">
+  {{ text.program_detail.deadline_prefix }} {{ program.deadline }} &middot;
+  {% if program.is_open_for_submissions %}
+    <span class="badge text-bg-success">{{ text.program_detail.status_open }}</span>
+  {% else %}
+    <span class="badge text-bg-secondary">{{ text.program_detail.status_closed }}</span>
+  {% endif %}
+</p>
+
+<div class="card mb-3">
+  <div class="card-header">{{ text.program_detail.link_card_title }}</div>
+  <div class="card-body">
+    <p class="mb-1">{{ text.program_detail.link_card_body }}</p>
+    <code>{{ request.scheme }}://{{ request.get_host }}{% url 'apply' program.id %}</code>
+  </div>
+</div>
+
+<table class="table table-hover align-middle">
+  <thead>
+    <tr>
+      {% for column in columns %}
+      <th>
+        <a href="?sort={{ column.key }}&dir={{ column.next_dir }}" class="text-decoration-none text-reset">
+          {{ column.label }} {{ column.arrow }}
+        </a>
+      </th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for application in applications %}
+    <tr>
+      <td><a href="{% url 'application_detail' application.id %}">{{ application.email }}</a></td>
+      <td>{{ application.submitted_at }}</td>
+      <td>{{ application.status_label }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3" class="text-muted">{{ text.program_detail.empty }}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

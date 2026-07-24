@@ -1,0 +1,100 @@
+{% extends "funding/base.html" %}
+{% block title %}{{ application.email }}{% endblock %}
+{% block content %}
+<p><a href="{% url 'program_detail' application.program.id %}">&larr; {{ application.program.name }}</a></p>
+<h1 class="h3">{{ application.email }}</h1>
+<p><span class="badge text-bg-info">{{ application.status_label }}</span></p>
+
+<div class="row">
+  <div class="col-md-7">
+
+    <div class="card mb-3">
+      <div class="card-header">{{ text.application_detail.documents_title }}</div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          {{ text.application_detail.proposal_label }} <a href="{% url 'application_document' application.id 'proposal' %}" target="_blank">{{ application.proposal_filename }}</a>
+        </li>
+        {% if application.upfront_invoice_filename %}
+        <li class="list-group-item">
+          {{ text.application_detail.upfront_invoice_label }} <a href="{% url 'application_document' application.id 'upfront_invoice' %}" target="_blank">{{ application.upfront_invoice_filename }}</a>
+        </li>
+        {% endif %}
+        {% if application.final_invoice_filename %}
+        <li class="list-group-item">
+          {{ text.application_detail.final_invoice_label }} <a href="{% url 'application_document' application.id 'final_invoice' %}" target="_blank">{{ application.final_invoice_filename }}</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+
+    {% if application.status == 'submitted' %}
+    <div class="card mb-3">
+      <div class="card-header">{{ text.application_detail.decision_title }}</div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          {{ decision_form.comment.label_tag }}
+          {{ decision_form.comment }}
+          <div class="mt-2">
+            <button type="submit" name="action" value="accept" class="btn btn-success">{{ text.application_detail.accept_button }}</button>
+            <button type="submit" name="action" value="refuse" class="btn btn-danger">{{ text.application_detail.refuse_button }}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if application.status == 'upfront_invoice_pending' %}
+    <div class="card mb-3">
+      <div class="card-header">{{ text.application_detail.applicant_link_title }}</div>
+      <div class="card-body">
+        <p class="mb-1">{{ text.application_detail.applicant_link_body }}</p>
+        <code>{{ request.scheme }}://{{ request.get_host }}{% url 'application_status' application.access_token %}</code>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if application.status == 'awaiting_work_approval' %}
+    <div class="card mb-3">
+      <div class="card-header">{{ text.application_detail.approve_work_title }}</div>
+      <div class="card-body">
+        <p>{{ text.application_detail.approve_work_body }}</p>
+        <form method="post">
+          {% csrf_token %}
+          {{ decision_form.comment.label_tag }}
+          {{ decision_form.comment }}
+          <div class="mt-2">
+            <button type="submit" name="action" value="approve_work" class="btn btn-success">{{ text.application_detail.approve_work_button }}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if application.status == 'final_invoice_pending' %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <p class="mb-1">{{ text.application_detail.waiting_final_invoice }}</p>
+        <code>{{ request.scheme }}://{{ request.get_host }}{% url 'application_status' application.access_token %}</code>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+
+  <div class="col-md-5">
+    <div class="card">
+      <div class="card-header">{{ text.application_detail.status_history_title }}</div>
+      <ul class="list-group list-group-flush">
+        {% for label, timestamp, comment in status_history %}
+        <li class="list-group-item">
+          <div><strong>{{ label }}</strong></div>
+          <div class="text-muted small">{{ timestamp }}</div>
+          {% if comment %}<div class="mt-1">&ldquo;{{ comment }}&rdquo;</div>{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

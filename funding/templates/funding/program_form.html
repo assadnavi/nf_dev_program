@@ -1,0 +1,21 @@
+{% extends "funding/base.html" %}
+{% block title %}{{ text.program_form.page_title }}{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">{{ text.program_form.page_title }}</h1>
+<form method="post" class="col-md-6">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <div class="mb-3">
+    <label class="form-label">{{ text.program_form.name_label }}</label>
+    {{ form.name.errors }}
+    {{ form.name }}
+  </div>
+  <div class="mb-3">
+    <label class="form-label">{{ text.program_form.deadline_label }}</label>
+    {{ form.deadline.errors }}
+    {{ form.deadline }}
+    <div class="form-text">{{ form.deadline.help_text }}</div>
+  </div>
+  <button type="submit" class="btn btn-primary">{{ text.program_form.submit }}</button>
+</form>
+{% endblock %}
