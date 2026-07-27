@@ -10,7 +10,7 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container">
-      <a class="navbar-brand" href="{% if user.is_authenticated %}{% url 'program_list' %}{% else %}/{% endif %}">{{ text.site.brand }}</a>
+      <a class="navbar-brand" href="{% if user.is_authenticated %}{% url 'program_list' %}{% else %}{% url 'login' %}{% endif %}">{{ text.site.brand }}</a>
       {% if user.is_authenticated %}
         <div class="d-flex align-items-center">
           <span class="text-light me-3">{{ user.username }}</span>
