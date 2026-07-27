@@ -15,6 +15,12 @@ from .site_text import get_text, render_text
 # ---------------------------------------------------------------------------
 
 
+def root(request):
+    if request.user.is_authenticated:
+        return redirect('program_list')
+    return redirect('login')
+
+
 def apply(request, program_id):
     program = get_object_or_404(Program, pk=program_id)
 

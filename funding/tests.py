@@ -225,6 +225,20 @@ class ProgramCreationTests(TestCase):
         )
 
 
+class RootRedirectTests(TestCase):
+    def setUp(self):
+        self.admin = User.objects.create_user('admin', password='pw')
+
+    def test_anonymous_visitor_redirected_to_login(self):
+        response = self.client.get(reverse('root'))
+        self.assertRedirects(response, reverse('login'))
+
+    def test_logged_in_admin_redirected_to_dashboard(self):
+        self.client.login(username='admin', password='pw')
+        response = self.client.get(reverse('root'))
+        self.assertRedirects(response, reverse('program_list'))
+
+
 class ProgramListSortingTests(TestCase):
     def setUp(self):
         self.admin = User.objects.create_user('admin', password='pw')
