@@ -33,8 +33,8 @@
   </thead>
   <tbody>
     {% for application in applications %}
-    <tr>
-      <td><a href="{% url 'application_detail' application.id %}">{{ application.email }}</a></td>
+    <tr style="cursor: pointer;" onclick="window.location='{% url 'application_detail' application.id %}';">
+      <td>{{ application.email }}</td>
       <td>{{ application.submitted_at }}</td>
       <td>{{ application.status_label }}</td>
     </tr>

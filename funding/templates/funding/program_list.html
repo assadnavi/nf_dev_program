@@ -20,8 +20,8 @@
   </thead>
   <tbody>
     {% for program in programs %}
-    <tr>
-      <td><a href="{% url 'program_detail' program.id %}">{{ program.name }}</a></td>
+    <tr style="cursor: pointer;" onclick="window.location='{% url 'program_detail' program.id %}';">
+      <td>{{ program.name }}</td>
       <td>{{ program.deadline }}</td>
       <td>
         {{ program.total_applications }} {{ text.program_list.applications_total_suffix }}
