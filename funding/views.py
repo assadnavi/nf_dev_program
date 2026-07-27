@@ -126,9 +126,7 @@ def _sort_and_build_columns(request, items, column_defs):
 def program_list(request):
     programs = list(Program.objects.all())
     for program in programs:
-        applications = list(program.applications.all())
-        program.total_applications = len(applications)
-        program.status_counts = _status_counts(applications)
+        program.total_applications = program.applications.count()
 
     columns = _sort_and_build_columns(request, programs, PROGRAM_LIST_COLUMNS)
 
@@ -214,10 +212,3 @@ def application_document(request, application_id, field):
     response = HttpResponse(bytes(blob), content_type=getattr(application, mimetype_field))
     response['Content-Disposition'] = f'inline; filename="{getattr(application, filename_field)}"'
     return response
-
-
-def _status_counts(applications):
-    counts = {key: 0 for key in Application.STATUS_LABELS}
-    for application in applications:
-        counts[application.status] += 1
-    return counts

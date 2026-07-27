@@ -23,12 +23,7 @@
     <tr style="cursor: pointer;" onclick="window.location='{% url 'program_detail' program.id %}';">
       <td>{{ program.name }}</td>
       <td>{{ program.deadline }}</td>
-      <td>
-        {{ program.total_applications }} {{ text.program_list.applications_total_suffix }}
-        {% for status, count in program.status_counts.items %}
-          {% if count %}<span class="badge text-bg-light border ms-1">{{ status }}: {{ count }}</span>{% endif %}
-        {% endfor %}
-      </td>
+      <td>{{ program.total_applications }} {{ text.program_list.applications_total_suffix }}</td>
       <td>
         {% if program.is_open_for_submissions %}
           <span class="badge text-bg-success">{{ text.program_list.status_open }}</span>
